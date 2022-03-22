@@ -1,7 +1,7 @@
 # Run with make push --file docker/Makefile
 # Note that makefiles differentiate between tabs and spaces in a weird way!
 
-DOCKER_REPOSITORY ?= freelawproject/bankruptcy
+DOCKER_REPOSITORY ?= freelawproject/bankruptcy-extractor
 
 DOCKER ?= docker
 export DOCKER
