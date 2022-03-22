@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  cl-bankruptcy:
+    container_name: cl-bankruptcy
+    build:
+      dockerfile: docker/Dockerfile
+      context: .
+    image: freelawproject/bankruptcy:latest
+    networks:
+      - cl_net_overlay
+
+  mock_cl_bankruptcy:
+    container_name: mock_cl_bankruptcy
+    image: freelawproject/bankruptcy:latest
+    networks:
+      - cl_net_overlay
+    depends_on:
+      - cl-bankruptcy
+
+networks:
+  cl_net_overlay:
+    driver: bridge
+    external: true
+
+

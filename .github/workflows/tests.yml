@@ -1,0 +1,22 @@
+name: Tests
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10"]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Create docker network
+      run: docker network create -d bridge --attachable cl_net_overlay
+    - name: Build Image
+      run: docker-compose -f docker-compose.dev.yml up --build -d
+    - name: Run tests
+      run: docker exec mock_cl_bankruptcy python3 -m unittest bankruptcy-docker.tests

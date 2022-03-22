@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  cl-bankruptcy:
+    container_name: cl-bankruptcy
+    build:
+      dockerfile: docker/Dockerfile
+      context: .
+    image: freelawproject/bankruptcy:latest
