@@ -11,7 +11,6 @@ def make_file(filename) -> Any:
 
 
 class BankruptcyTests(unittest.TestCase):
-
     def test_heartbeat(self):
         """"""
         response = requests.post("http://cl-bankruptcy:5050/")
@@ -21,17 +20,22 @@ class BankruptcyTests(unittest.TestCase):
     def test_bankruptcy(self):
         """"""
         files = make_file(filename="gov.uscourts.ganb.1125040.35.0.pdf")
-        response = requests.post("http://cl-bankruptcy:5050/extract/form/all/", files=files)
+        response = requests.post(
+            "http://cl-bankruptcy:5050/extract/form/all/", files=files
+        )
         self.assertEqual(response.status_code, 200, msg="Failed status code.")
-        self.assertTrue(response.json()['form_106_sum']['consumer_debts'], msg="Failed response.")
-
+        self.assertTrue(
+            response.json()["form_106_sum"]["consumer_debts"], msg="Failed response."
+        )
 
     def test_scanned_pdfs(self):
         """Can we gracefully fail on scans?"""
 
         files = make_file(filename="gov.uscourts.orb.507503.11.0.pdf")
-        response = requests.post("http://cl-bankruptcy:5050/extract/form/all/", files=files).json()
-        self.assertFalse(response['success'])
+        response = requests.post(
+            "http://cl-bankruptcy:5050/extract/form/all/", files=files
+        ).json()
+        self.assertFalse(response["success"])
 
     def test_can_we_handle_missing_checkboxes(self):
         """Can we handle partially bad PDF can still return content?"""
@@ -39,7 +43,9 @@ class BankruptcyTests(unittest.TestCase):
         # filepath = f"{self.assets}/gov.uscourts.ganb.1125040.35.0.pdf"
         # results = extract_all(filepath=filepath)
         files = make_file(filename="gov.uscourts.ganb.1125040.35.0.pdf")
-        results = requests.post("http://cl-bankruptcy:5050/extract/form/all/", files=files).json()
+        results = requests.post(
+            "http://cl-bankruptcy:5050/extract/form/all/", files=files
+        ).json()
         self.assertEqual(results["form_106_d"]["error"], "Failed to find document.")
         self.assertEqual(len(results["form_106_ef"]["creditors"]), 22)
 
@@ -47,7 +53,9 @@ class BankruptcyTests(unittest.TestCase):
         """Can we extract content from Official Form 106 Sum"""
 
         files = make_file(filename="gov.uscourts.orb.473342.1.0.pdf")
-        results = requests.post("http://cl-bankruptcy:5050/extract/form/106-SUM/", files=files).json()
+        results = requests.post(
+            "http://cl-bankruptcy:5050/extract/form/106-SUM/", files=files
+        ).json()
 
         self.assertTrue(results["7/11/13"])
         self.assertTrue(results["non_consumer_debts"])
@@ -58,8 +66,9 @@ class BankruptcyTests(unittest.TestCase):
         """Can we extract content for unsecured creditors"""
 
         files = make_file(filename="gov.uscourts.orb.473342.1.0.pdf")
-        results = requests.post("http://cl-bankruptcy:5050/extract/form/106-EF/",
-                                files=files).json()
+        results = requests.post(
+            "http://cl-bankruptcy:5050/extract/form/106-EF/", files=files
+        ).json()
         self.assertEqual(
             len(results["creditors"]), 19, msg="Failed to extract creditors"
         )
@@ -72,8 +81,9 @@ class BankruptcyTests(unittest.TestCase):
         """Can we extract secured creditors from form 106D"""
 
         files = make_file(filename="gov.uscourts.orb.473342.1.0.pdf")
-        results = requests.post("http://cl-bankruptcy:5050/extract/form/106-D/",
-                                files=files).json()
+        results = requests.post(
+            "http://cl-bankruptcy:5050/extract/form/106-D/", files=files
+        ).json()
         self.assertEqual(
             len(results["creditors"]), 9, msg="Failed to extract creditors"
         )
@@ -82,8 +92,9 @@ class BankruptcyTests(unittest.TestCase):
         """Can we extract content from Form 106 A/B"""
 
         files = make_file(filename="gov.uscourts.orb.473342.1.0.pdf")
-        results = requests.post("http://cl-bankruptcy:5050/extract/form/106-AB/",
-                                files=files).json()
+        results = requests.post(
+            "http://cl-bankruptcy:5050/extract/form/106-AB/", files=files
+        ).json()
         auto = results["cars_land_and_crafts"][3]
         self.assertEqual(
             len(results["cars_land_and_crafts"]),
@@ -101,7 +112,9 @@ class BankruptcyTests(unittest.TestCase):
         """Can we extract content from all four documents?"""
 
         files = make_file(filename="gov.uscourts.orb.473342.1.0.pdf")
-        results = requests.post("http://cl-bankruptcy:5050/extract/form/all/", files=files).json()
+        results = requests.post(
+            "http://cl-bankruptcy:5050/extract/form/all/", files=files
+        ).json()
 
         self.assertIn("Jr.", results["info"]["debtor_1"])
         self.assertEqual(results["form_106_sum"]["1a"], "325,882.00")

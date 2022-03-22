@@ -11,7 +11,7 @@ Assuming you have docker installed run:
 
     docker-compose -f docker-compose.yml up --build -d
 
-or 
+or
 
     docker-compose -f docker-compose.dev.yml up --build -d
 

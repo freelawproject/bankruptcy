@@ -1,7 +1,14 @@
 from django.http import HttpResponse, JsonResponse
-from bankruptcy import extract_all, extract_official_form_106_a_b, extract_official_form_106_d, extract_official_form_106_e_f, extract_official_form_106_sum
+from bankruptcy import (
+    extract_all,
+    extract_official_form_106_a_b,
+    extract_official_form_106_d,
+    extract_official_form_106_e_f,
+    extract_official_form_106_sum,
+)
 from .forms import DocumentForm
 from .utils import cleanup_form
+
 
 def heartbeat(request):
     """Heartbeat endpoint
@@ -24,6 +31,7 @@ def extract_bankruptcy_form(request):
         output = {"success": False}
     return JsonResponse(output)
 
+
 def extract_106_AB(request):
     """"""
     form = DocumentForm(request.POST, request.FILES)
@@ -34,6 +42,7 @@ def extract_106_AB(request):
     if not output:
         output = {"success": False}
     return JsonResponse(output)
+
 
 def extract_106_D(request):
     """"""
@@ -46,6 +55,7 @@ def extract_106_D(request):
         output = {"success": False}
     return JsonResponse(output)
 
+
 def extract_106_EF(request):
     """"""
     form = DocumentForm(request.POST, request.FILES)
@@ -56,6 +66,7 @@ def extract_106_EF(request):
     if not output:
         output = {"success": False}
     return JsonResponse(output)
+
 
 def extract_106_SUM(request):
     """"""

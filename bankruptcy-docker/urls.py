@@ -6,7 +6,7 @@ from .views import (
     extract_106_AB,
     extract_106_D,
     extract_106_EF,
-    extract_106_SUM
+    extract_106_SUM,
 )
 
 urlpatterns = [
@@ -40,5 +40,4 @@ urlpatterns = [
         extract_106_AB,
         name="extract-all-available-forms",
     ),
-
 ]
